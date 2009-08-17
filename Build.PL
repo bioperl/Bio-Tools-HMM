@@ -21,12 +21,13 @@ my $build = Module::Build->new
                        },
      requires => {
                   'perl'                 => '5.8.0',
-                  'Bio::Root::Root'      => '1.6.0',
-                  'Bio::Matrix::Scoring' => '1.6.0',
+                  'Bio::Root::Version'   => '1.006009',
+                  # just need Version until we split things up (upon where each dist gets it's own version)
+                  #'Bio::Matrix::Scoring' => '1.6.0',
                  },
      c_source => 'src',
      #xs_files       => { 'HMM.xs' => 'lib/Bio/Ext/HMM.xs' },
-     #extra_compiler_flags => ['-lm'],
+     extra_compiler_flags => ['-lm'],
 
     );
 $build->create_build_script;
