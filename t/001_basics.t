@@ -3,8 +3,20 @@
 use strict;
 use warnings;
 
-use Bio::Matrix::Scoring;
-use Bio::Tools::HMM;
+BEGIN {
+    use Bio::Root::Test;
+    test_begin(-tests => 2);
+    use_ok('Bio::Matrix::Scoring');
+    use_ok('Bio::Tools::HMM'); 
+}
+
+my $debug = test_debug();
+
+sub debugging {
+    return unless $debug;
+    print STDERR $_[0] if @_ == 1;
+    printf STDERR ($_[0], $_[1]) if @_ == 2;
+}
 
 my $hmm = Bio::Tools::HMM->new('-symbols' => "123456", '-states' => "FL");
 
@@ -32,75 +44,76 @@ $obs2 .= "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
 my @seqs = ($seq1, $seq2);
 
-printf "Baum-Welch Training\n";
-printf "===================\n";
-
+debugging "Baum-Welch Training\n";
+debugging "===================\n";
 
 $hmm->baum_welch_training(\@seqs);
 
-printf "Initial Probability Array:\n";
+debugging "Initial Probability Array:\n";
 my $init = $hmm->init_prob;
-foreach my $s (@{$init}) {
-   printf "%g\t", $s;
-}
-printf "\n";
 
-printf "Transition Probability Matrix:\n";
+foreach my $s (@{$init}) {
+   debugging("%g\t", $s);
+}
+debugging "\n";
+
+debugging "Transition Probability Matrix:\n";
 my $matrix = $hmm->transition_prob;
 foreach my $r ($matrix->row_names) {
-   foreach my $c ($matrix->column_names) {
-      printf "%g\t", $matrix->entry($r, $c);
-   }
-   printf "\n";
+    foreach my $c ($matrix->column_names) {
+       debugging "%g\t", $matrix->entry($r, $c);
+    }
+    debugging "\n";
 }
 
-printf "Emission Probability Matrix:\n";
+debugging "Emission Probability Matrix:\n";
 $matrix = $hmm->emission_prob;
 foreach my $r ($matrix->row_names) {
-   foreach my $c ($matrix->column_names) {
-      printf "%g\t", $matrix->entry($r, $c);
-   }
-   printf "\n";
+    foreach my $c ($matrix->column_names) {
+        debugging "%g\t", $matrix->entry($r, $c);
+    }
+    debugging "\n";
 }
 
-printf "\n";
-printf "Log Probability of sequence 1: %g\n", $hmm->likelihood($seq1);
-printf "Log Probability of sequence 2: %g\n", $hmm->likelihood($seq2);
-printf "\n";
-printf "Statistical Training\n";
-printf "====================\n";
+debugging "\n";
+debugging "Log Probability of sequence 1: %g\n", $hmm->likelihood($seq1);
+debugging "Log Probability of sequence 2: %g\n", $hmm->likelihood($seq2);
+debugging "\n";
+debugging "Statistical Training\n";
+debugging "====================\n";
 
 my @obs = ($obs1, $obs2);
 $hmm->statistical_training(\@seqs, \@obs);
 
-printf "Initial Probability Array:\n";
+debugging "Initial Probability Array:\n";
 $init = $hmm->init_prob;
 $hmm->init_prob($init);
 foreach my $s (@{$init}) {
-   printf "%g\t", $s;
+    debugging "%g\t", $s;
 }
-printf "\n";
+debugging "\n";
 
-printf "Transition Probability Matrix:\n";
+debugging "Transition Probability Matrix:\n";
 $matrix = $hmm->transition_prob;
 $hmm->transition_prob($matrix);
 foreach my $r ($matrix->row_names) {
    foreach my $c ($matrix->column_names) {
-      printf "%g\t", $matrix->entry($r, $c);
+      debugging "%g\t", $matrix->entry($r, $c);
    }
-   printf "\n";
+   debugging "\n";
 }
 
-printf "Emission Probability Matrix:\n";
+debugging "Emission Probability Matrix:\n";
 $matrix = $hmm->emission_prob;
 $hmm->emission_prob($matrix);
 foreach my $r ($matrix->row_names) {
    foreach my $c ($matrix->column_names) {
-      printf "%g\t", $matrix->entry($r, $c);
+      debugging "%g\t", $matrix->entry($r, $c);
    }
-   printf "\n";
+   debugging "\n";
 }
 
-printf "Viterbi Algorithm:\n";
+debugging "Viterbi Algorithm:\n";
 my $obs3 = $hmm->viterbi($seq1);
-printf "%s\n", $obs3;
+debugging "%s\n", $obs3;
+
