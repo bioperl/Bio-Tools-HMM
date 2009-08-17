@@ -26,7 +26,7 @@ my $build = Module::Build->new
                  },
      c_source => 'src',
      #xs_files       => { 'HMM.xs' => 'lib/Bio/Ext/HMM.xs' },
-     extra_compiler_flags => ['-lm'],
+     #extra_compiler_flags => ['-lm'],
 
     );
 $build->create_build_script;
