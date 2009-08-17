@@ -66,13 +66,6 @@ genes in E. coli DNA in a classical paper in 1994. Since then, there have
 been extensive application of HMM to other area of Biology, for example,
 multiple sequence alignment, CpG island detection and so on.
 
-=head1 DEPENDENCIES
-
-This package comes with the main bioperl distribution. You also need
-to install the lastest bioperl-ext package which contains the XS code
-that implements the algorithms. This package won't work if you haven't
-compiled the bioperl-ext package.
-
 =head1 TO-DO
 
 
