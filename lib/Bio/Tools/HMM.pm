@@ -130,11 +130,15 @@ web:
 
 =head1 AUTHOR
 
-        This implementation was written by Yee Man Chan (ymc@yahoo.com).
-        Copyright (c) 2005 Yee Man Chan. All rights reserved. This program
-        is free software; you can redistribute it and/or modify it under
-        the same terms as Perl itself. All the code are written by Yee
-        Man Chan without borrowing any code from anywhere.
+Yee Man Chan <ymc@yahoo.com>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright (c) 2005 Yee Man Chan. All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself. All the code are written by
+Yee Man Chan without borrowing any code from anywhere.
 
 =cut
 
