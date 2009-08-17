@@ -496,7 +496,7 @@ sub transition_prob {
                my $b = substr($self->{'states'}, $j, 1);
                $sum += $matrix->entry($a, $b);
             }
-            if ($sum != 1.0) {
+            if (sprintf("%.2f",$sum) != 1.0) {
                $self->throw("Sum of probabilities for each from-state must be 1.0; got $sum\n");
             }
          }
@@ -557,7 +557,7 @@ sub emission_prob {
                my $b = substr($self->{'symbols'}, $j, 1);
                $sum += $matrix->entry($a, $b);
             }
-            if ($sum != 1.0) {
+            if (sprintf("%.2f",$sum) != 1.0) {
                $self->throw("Sum of probabilities for each state must be 1.0; got $sum\n");
             }
          }
