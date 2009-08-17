@@ -1,0 +1,10 @@
+TYPEMAP
+HMM *    T_HMM
+
+INPUT
+T_HMM
+        $var = INT2PTR(HMM *, (SvIV((SV*)SvRV($arg))));
+
+OUTPUT
+T_HMM
+        sv_setref_pv($arg, "Bio::Ext::HMM::HMM", (void *) $var);
