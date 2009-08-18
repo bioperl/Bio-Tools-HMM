@@ -66,6 +66,13 @@ genes in E. coli DNA in a classical paper in 1994. Since then, there have
 been extensive application of HMM to other area of Biology, for example,
 multiple sequence alignment, CpG island detection and so on.
 
+=head1 DEPENDENCIES
+
+This package comes with the main bioperl distribution. You also need
+to install the lastest bioperl-ext package which contains the XS code
+that implements the algorithms. This package won't work if you haven't
+compiled the bioperl-ext package.
+
 =head1 TO-DO
 
 
@@ -123,15 +130,11 @@ web:
 
 =head1 AUTHOR
 
-Yee Man Chan <ymc@yahoo.com>
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright (c) 2005 Yee Man Chan. All rights reserved.
-
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself. All the code are written by
-Yee Man Chan without borrowing any code from anywhere.
+        This implementation was written by Yee Man Chan (ymc@yahoo.com).
+        Copyright (c) 2005 Yee Man Chan. All rights reserved. This program
+        is free software; you can redistribute it and/or modify it under
+        the same terms as Perl itself. All the code are written by Yee
+        Man Chan without borrowing any code from anywhere.
 
 =cut
 
@@ -169,10 +172,8 @@ sub new {
 
    if (defined $symbols) {
       if (scalar($symbols)) {
-         # check duplicate symbols
-         if ($self->symbols($symbols) < 0) {
-            $self->throw("Duplicate symbols!\n");
-         }
+         # set symbols
+         $self->symbols($symbols);
       }
       else {
          $self->throw("We don't support list of symbols in this version.\n");
@@ -181,10 +182,8 @@ sub new {
 
    if (defined $states) {
       if (scalar($states)) {
-         # check duplicate states
-         if ($self->states($states) < 0) {
-            $self->throw("Duplicate states!\n");
-         }
+         # set states
+         $self->states($states);
       }
       else {
          $self->throw("We don't support list of states in this version.\n");
@@ -247,13 +246,14 @@ sub statistical_training {
    my $valid_symbols;
    my ($seq_cnt, $hs_cnt);
    my $i;
+   my $seq;
 
    if( ! defined $seqs or ! defined $hss) {
       $self->warn("Cannot calculate without supply an observation and a hidden state sequence!");
       return;
    }
    $seq_cnt = @{$seqs};
-   $hs_cnt = @{$seqs};
+   $hs_cnt = @{$hss};
    if ($seq_cnt != $hs_cnt) {
       $self->throw("There must be the same number of observation sequences and 
                     hidden state sequences!\n");
@@ -300,6 +300,7 @@ sub statistical_training {
 sub baum_welch_training {
    my ($self, $seqs) = @_;
    my $valid_symbols;
+   my $seq;
 
    if( ! defined $seqs) {
       $self->warn("Cannot calculate without supply an observation sequence!");
@@ -363,6 +364,7 @@ sub symbols {
    my ($self,$val) = @_;
    my %alphabets = ();
    my $c;
+   my $i;
 
    if ( defined $val ) {
 # find duplicate
@@ -398,6 +400,7 @@ sub states {
    my ($self,$val) = @_;
    my %alphabets = ();
    my $c;
+   my $i;
 
    if ( defined $val ) {
 # find duplicate
@@ -440,7 +443,7 @@ sub init_prob {
          foreach (@{$init}) {
             $sum += $_;
          }
-         if ($sum != 1.0) {
+         if (sprintf("%.4f", $sum) ne "1.0000") {
             $self->throw("The sum of initial probability array must be 1.0!\n");
          }
          if ($size != length($self->{'states'})) {
@@ -496,7 +499,7 @@ sub transition_prob {
                my $b = substr($self->{'states'}, $j, 1);
                $sum += $matrix->entry($a, $b);
             }
-            if (sprintf("%.2f",$sum) != 1.0) {
+            if (sprintf("%.4f", $sum) ne "1.0000") {
                $self->throw("Sum of probabilities for each from-state must be 1.0; got $sum\n");
             }
          }
@@ -557,7 +560,7 @@ sub emission_prob {
                my $b = substr($self->{'symbols'}, $j, 1);
                $sum += $matrix->entry($a, $b);
             }
-            if (sprintf("%.2f",$sum) != 1.0) {
+            if (sprintf("%.4f", $sum) ne "1.0000") {
                $self->throw("Sum of probabilities for each state must be 1.0; got $sum\n");
             }
          }
