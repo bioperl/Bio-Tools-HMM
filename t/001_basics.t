@@ -53,7 +53,7 @@ debugging "Initial Probability Array:\n";
 my $init = $hmm->init_prob;
 
 is(scalar(@$init), 2);
-my @test_vals = (0.499992,0.500008);
+my @test_vals = (0.499997,0.500003);
 
 foreach my $s (@{$init}) {
     float_is($s, shift @test_vals, "Initial prob.");
@@ -64,8 +64,8 @@ debugging "\n";
 debugging "Transition Probability Matrix:\n";
 my $matrix = $hmm->transition_prob;
 
-@test_vals = (0.499992,0.500008,0.499992,0.500008,
-              0.499992,0.500008,0.499992,0.500008);
+@test_vals = (0.499997,0.500003,0.499997,0.500003,
+              0.499997,0.500003,0.499997,0.500003);
 foreach my $r ($matrix->row_names) {
     foreach my $c ($matrix->column_names) {
         float_is($matrix->entry($r, $c), shift @test_vals, "Initial prob.");
